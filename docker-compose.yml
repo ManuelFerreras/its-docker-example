@@ -14,14 +14,40 @@ services:
     ports:
       - 8830:5000 #8830 - localhost del host, 5000 del container
 
+  app2:
+    build: ./app
+    links:
+      - db
+    ports:
+      - 8831:5001 #8831 - localhost del host, 5001 del container
+
 
   db:
     image: mysql:5.7
     environment:
+      MYSQL_DATABASE: test
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: 0.0.0.0
       MYSQL_USER: username
       MYSQL_PASSWORD: password
     volumes:
       - ./db:/docker-entrypoint-initdb.d/:ro
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
+  phpmyadmin: 
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
 
+volumes:
+  dbdata:

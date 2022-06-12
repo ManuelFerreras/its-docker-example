@@ -12,11 +12,11 @@ def get_connection():
     :return: DB connection
     """
     config = {
-        'user': os.environ.get('DB_USER_NAME','root'),
-        'password': os.environ.get('DB_PASSWORD','root'),
+        'user': 'root',
+        'password': 'root',
         'host': 'db',
         'port': '3306',
-        'database': 'drinks'
+        'database': 'knights'
     }
     connection = mysql.connector.connect(**config)
     return connection
